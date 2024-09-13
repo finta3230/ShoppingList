@@ -6,24 +6,27 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.shoppinglist.domain.ShopItem
 
-@Database(entities = [ShopItem::class], version = 1)
+@Database(entities = [ShopItem::class], version = 1, exportSchema = false)
 abstract class ShopListDatabase : RoomDatabase() {
-
-    private lateinit var application: Application
-
-    fun init(application: Application) {
-        this.application = application
-    }
-
-    private val shopListDatabase: ShopListDatabase by lazy {
-        Room.databaseBuilder(application, ShopListDatabase::class.java, DB_NAME)
-            .createFromAsset("room_article.db")
-            .build()
-    }
 
     companion object {
         private const val DB_NAME = "shopList.db"
     }
 
-    abstract fun shopListDao() : ShopListDao
+    private lateinit var applicationContext: Application
+
+    fun init(application: Application) {
+        applicationContext = application
+    }
+    
+    val instance: ShopListDatabase by lazy {
+        Room.databaseBuilder(
+            applicationContext,
+            ShopListDatabase::class.java,
+            DB_NAME
+        ).build()
+    }
+
+
+    abstract fun shopListDao(): ShopListDao
 }

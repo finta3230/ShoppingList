@@ -8,20 +8,17 @@ import com.example.shoppinglist.domain.ShopListRepository
 //Класс который будет реализовывать интрфейс в domain пакете. Добавляют к имени -Impl
 //Data слой отвечает за работу с данными. Он предоставляет конкретную реализацию репозитория и зависит от Domain слоя и знает о нём всё
 
-//TODO - вместо переменной создать БД.
 
 object ShopListRepositoryImpl : ShopListRepository {
 
     private val shopListLD = MutableLiveData<List<ShopItem>>()
     private val shopList = mutableListOf<ShopItem>()
+    private val shopListDatabase = ShopListDatabase
 
     private var autoIncrementId = 0
 
     init {
-        for (i in 0 until 10){
-            val item = ShopItem("Name $i", i, true)
-            addShopItem(item)
-        }
+
     }
 
     override fun addShopItem(item: ShopItem) {
