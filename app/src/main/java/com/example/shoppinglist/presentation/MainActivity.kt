@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.R
 
 //Presentation слой отвечает за отображение данных и взаимодействие с пользователем.
@@ -16,7 +17,7 @@ import com.example.shoppinglist.R
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
-    private var count = 0
+    private lateinit var adapter : ShopListAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,17 +30,17 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        setUpRecyclerView()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.shopList.observe(this){
-            Log.d("Main Activity", it.toString())
-            if (count == 0) {
-                count++
-                val item = it[0]
-                viewModel.changeShopItemState(item)
-            }
+            adapter.shopList = it
         }
 
     }
 
-
+    private fun setUpRecyclerView () {
+        val shopListRecyclerView = findViewById<RecyclerView>(R.id.shopListRecyclerView)
+        adapter = ShopListAdapter()
+        shopListRecyclerView.adapter = adapter
+    }
 }
