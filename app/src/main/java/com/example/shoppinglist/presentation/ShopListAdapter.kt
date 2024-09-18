@@ -18,8 +18,9 @@ import com.example.shoppinglist.domain.ShopItem
 class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>() {
 
     companion object {
-        private const val IS_ACTIVE = 1
-        private const val IS_NON_ACTIVE = 0
+        const val IS_ACTIVE = 1
+        const val IS_NON_ACTIVE = 0
+        const val MAX_POOL_SIZE = 15
     }
 
     var count: Int = 0
