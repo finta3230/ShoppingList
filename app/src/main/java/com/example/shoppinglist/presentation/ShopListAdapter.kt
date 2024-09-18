@@ -17,12 +17,12 @@ import com.example.shoppinglist.domain.ShopItem
 
 class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>() {
 
-    companion object{
+    companion object {
         private const val IS_ACTIVE = 1
         private const val IS_NON_ACTIVE = 0
     }
 
-    var count : Int = 0
+    var count: Int = 0
 
     var shopList = listOf<ShopItem>()
         set(value) {
@@ -40,30 +40,25 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
 
     override fun onBindViewHolder(holder: ShopListViewHolder, position: Int) {
         val shopItem = shopList[position]
-        val status = if (shopItem.enabled) {
-            "Active"
-        } else {
-            "Non active"
-        }
         holder.itemView.setOnLongClickListener {
 //            !shopItem.enabled
             true
         }
-        if (getItemViewType(position) == IS_NON_ACTIVE) {
-            holder.nameTextView.text = "${shopItem.name} + $status"
-            holder.countTextView.text = shopItem.count.toString()
-            holder.shopItemLinearLayout.setBackgroundColor(
-                ContextCompat.getColor(holder.itemView.context, R.color.nonActive_item_bg))
-        } else {
-            holder.nameTextView.text = "${shopItem.name} + $status"
-            holder.countTextView.text = shopItem.count.toString()
-            holder.shopItemLinearLayout.setBackgroundColor(
-                ContextCompat.getColor(holder.itemView.context, R.color.active_item_bg))
+        val colorId = when (getItemViewType(position)) {
+            IS_ACTIVE -> R.color.active_item_bg
+            IS_NON_ACTIVE -> R.color.nonActive_item_bg
+            else -> throw RuntimeException("Unknown view type")
         }
+        holder.nameTextView.text = shopItem.name
+        holder.countTextView.text = shopItem.count.toString()
+        holder.shopItemLinearLayout.setBackgroundColor(
+            ContextCompat.getColor(holder.itemView.context, colorId)
+        )
 
     }
 
-    override fun getItemViewType(position: Int): Int = if(shopList[position].enabled) IS_ACTIVE else IS_NON_ACTIVE
+    override fun getItemViewType(position: Int): Int =
+        if (shopList[position].enabled) IS_ACTIVE else IS_NON_ACTIVE
 
     override fun getItemCount(): Int = shopList.size
 
