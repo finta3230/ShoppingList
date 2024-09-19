@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.R
+import com.example.shoppinglist.domain.ShopItem
 
 //Presentation слой отвечает за отображение данных и взаимодействие с пользователем.
 //Методы бизнес логики вызываются из UseCase
@@ -17,7 +18,7 @@ import com.example.shoppinglist.R
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
-    private lateinit var adapter : ShopListAdapter
+    private lateinit var shopListAdapter: ShopListAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,21 +33,27 @@ class MainActivity : AppCompatActivity() {
 
         setUpRecyclerView()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        viewModel.shopList.observe(this){
-            adapter.shopList = it
+        viewModel.shopList.observe(this) {
+            shopListAdapter.shopList = it
         }
+
+        shopListAdapter.onShopItemLongClickListener = { viewModel.changeShopItemState(it) }
 
     }
 
-    private fun setUpRecyclerView () {
+    private fun setUpRecyclerView() {
         val shopListRecyclerView = findViewById<RecyclerView>(R.id.shopListRecyclerView)
-        adapter = ShopListAdapter()
-        shopListRecyclerView.adapter = adapter
-        shopListRecyclerView
-            .recycledViewPool
-            .setMaxRecycledViews(ShopListAdapter.IS_ACTIVE, ShopListAdapter.MAX_POOL_SIZE)
-        shopListRecyclerView
-            .recycledViewPool
-            .setMaxRecycledViews(ShopListAdapter.IS_NON_ACTIVE, ShopListAdapter.MAX_POOL_SIZE)
+        with(shopListRecyclerView) {
+            shopListAdapter = ShopListAdapter()
+            this.adapter = shopListAdapter
+            recycledViewPool.setMaxRecycledViews(
+                ShopListAdapter.IS_ACTIVE,
+                ShopListAdapter.MAX_POOL_SIZE
+            )
+            recycledViewPool.setMaxRecycledViews(
+                ShopListAdapter.IS_NON_ACTIVE,
+                ShopListAdapter.MAX_POOL_SIZE
+            )
+        }
     }
 }
