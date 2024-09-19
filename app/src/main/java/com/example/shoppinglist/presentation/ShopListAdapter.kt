@@ -23,7 +23,9 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
         const val MAX_POOL_SIZE = 15
     }
 
+    var onShopItemClickListener : ((ShopItem) -> Unit)? = null
     var onShopItemLongClickListener : ((ShopItem) -> Unit)? = null
+
     var count: Int = 0
 
     var shopList = listOf<ShopItem>()
@@ -47,6 +49,9 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
             onShopItemLongClickListener?.invoke(shopItem)
             true
         }
+        holder.itemView.setOnClickListener {
+            onShopItemClickListener?.invoke(shopItem)
+        }
         val colorId = when (getItemViewType(position)) {
             IS_ACTIVE -> R.color.active_item_bg
             IS_NON_ACTIVE -> R.color.nonActive_item_bg
@@ -60,14 +65,12 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
 
     }
 
+
     override fun getItemViewType(position: Int): Int =
         if (shopList[position].enabled) IS_ACTIVE else IS_NON_ACTIVE
 
     override fun getItemCount(): Int = shopList.size
 
-    interface OnShopItemLongClickListener {
-        fun onShopItemLongClick(shopItem: ShopItem)
-    }
 
     class ShopListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val shopItemLinearLayout = itemView.findViewById<LinearLayout>(R.id.shopItemLinearLayout)

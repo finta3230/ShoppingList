@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.R
 import com.example.shoppinglist.domain.ShopItem
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             shopListAdapter.shopList = it
         }
 
-        shopListAdapter.onShopItemLongClickListener = { viewModel.changeShopItemState(it) }
+
 
     }
 
@@ -55,5 +56,42 @@ class MainActivity : AppCompatActivity() {
                 ShopListAdapter.MAX_POOL_SIZE
             )
         }
+
+        setUpClick()
+        setUpLongCLick()
+        setUpSwipe(shopListRecyclerView)
     }
+
+    private fun setUpSwipe(shopListRecyclerView: RecyclerView) {
+        run {
+            ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+                0,
+                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+            ) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean = false
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val item = shopListAdapter.shopList[viewHolder.adapterPosition]
+                    viewModel.removeShopItem(item)
+                }
+            })
+        }.attachToRecyclerView(shopListRecyclerView)
+    }
+
+    private fun setUpLongCLick() {
+        shopListAdapter.onShopItemClickListener = {
+            Log.d("MainActivity", it.toString())
+    //            TODO ("add editShopItem_activity and create intentFactory)")
+        }
+    }
+
+    private fun setUpClick() {
+        shopListAdapter.onShopItemLongClickListener = { viewModel.changeShopItemState(it) }
+    }
+
+
 }
