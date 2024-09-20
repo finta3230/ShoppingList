@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.R
 import com.example.shoppinglist.domain.ShopItem
@@ -26,16 +27,19 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
     var onShopItemClickListener : ((ShopItem) -> Unit)? = null
     var onShopItemLongClickListener : ((ShopItem) -> Unit)? = null
 
-    var count: Int = 0
-
+    private var count = 0
+// Создаём экземпляр Diff util чтобы при присвоении нового значения в списке происходило сравнение элементов
+// Экземпляр DiffUtil.calculateDiff вычисляет все изменения и хранит в переменной diffResult при помощи callback (правила сравнеения мы прописали в классе ShopListDiffCallback)
+// Метод dispatchUpdatesTo обновляет наш список в адаптере
     var shopList = listOf<ShopItem>()
         set(value) {
+            val callback = ShopListDiffCallback(shopList,value)
+            val diffResult = DiffUtil.calculateDiff(callback)
+            diffResult.dispatchUpdatesTo(this)
             field = value
-            notifyDataSetChanged()
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopListViewHolder {
-        Log.d("ShopListAdapter", "onCreateViewHolder count = ${++count}")
         val view = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.shop_item, parent, false)
@@ -44,6 +48,7 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
 
     // Вызываем метод invoke, чтобы доставить ? перед вызовом
     override fun onBindViewHolder(holder: ShopListViewHolder, position: Int) {
+        Log.d("ShopListAdapter", "onBindViewHolder count = ${++count}")
         val shopItem = shopList[position]
         holder.itemView.setOnLongClickListener {
             onShopItemLongClickListener?.invoke(shopItem)
