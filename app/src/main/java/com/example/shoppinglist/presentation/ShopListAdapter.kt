@@ -1,22 +1,13 @@
 package com.example.shoppinglist.presentation
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import com.example.shoppinglist.R
 import com.example.shoppinglist.domain.ShopItem
 
-class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>() {
+class ShopListAdapter : ListAdapter<ShopItem, ShopItemViewHolder> (ShopItemDiffCallback()) {
 
     companion object {
         const val IS_ACTIVE = 1
@@ -26,30 +17,31 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
 
     var onShopItemClickListener : ((ShopItem) -> Unit)? = null
     var onShopItemLongClickListener : ((ShopItem) -> Unit)? = null
+/*
+1ый вариант:
+    Создаём экземпляр Diff util чтобы при присвоении нового значения в списке происходило сравнение элементов.
+    Экземпляр DiffUtil.calculateDiff вычисляет все изменения и хранит в переменной diffResult
+    при помощи callback (правила сравнеения мы прописали в классе ShopListDiffCallback).
+    Метод dispatchUpdatesTo обновляет наш список в адаптере
+ 2ой вариант:
+    Создаём класс item Diff Callback который работает с элементами а не списками. А также вычисления
+    производятся на отдельном потоке.
+    Также меняем наследование адаптера от ListAdapter где в конструктор передаём класс Diff.ItemCallback.
+    теперь метод getSize не нужен, а также onRecycledView.
+    Обновление списка происходит через метод submitList()
 
-    private var count = 0
-// Создаём экземпляр Diff util чтобы при присвоении нового значения в списке происходило сравнение элементов
-// Экземпляр DiffUtil.calculateDiff вычисляет все изменения и хранит в переменной diffResult при помощи callback (правила сравнеения мы прописали в классе ShopListDiffCallback)
-// Метод dispatchUpdatesTo обновляет наш список в адаптере
-    var shopList = listOf<ShopItem>()
-        set(value) {
-            val callback = ShopListDiffCallback(shopList,value)
-            val diffResult = DiffUtil.calculateDiff(callback)
-            diffResult.dispatchUpdatesTo(this)
-            field = value
-        }
+ */
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopItemViewHolder {
         val view = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.shop_item, parent, false)
-        return ShopListViewHolder(view)
+        return ShopItemViewHolder(view)
     }
 
     // Вызываем метод invoke, чтобы доставить ? перед вызовом
-    override fun onBindViewHolder(holder: ShopListViewHolder, position: Int) {
-        Log.d("ShopListAdapter", "onBindViewHolder count = ${++count}")
-        val shopItem = shopList[position]
+    override fun onBindViewHolder(holder: ShopItemViewHolder, position: Int) {
+        val shopItem = getItem(position)
         holder.itemView.setOnLongClickListener {
             onShopItemLongClickListener?.invoke(shopItem)
             true
@@ -70,16 +62,7 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopListViewHolder>
 
     }
 
-
     override fun getItemViewType(position: Int): Int =
-        if (shopList[position].enabled) IS_ACTIVE else IS_NON_ACTIVE
+        if (getItem(position).enabled) IS_ACTIVE else IS_NON_ACTIVE
 
-    override fun getItemCount(): Int = shopList.size
-
-
-    class ShopListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val shopItemLinearLayout = itemView.findViewById<LinearLayout>(R.id.shopItemLinearLayout)
-        val nameTextView = itemView.findViewById<TextView>(R.id.nameTextView)
-        val countTextView = itemView.findViewById<TextView>(R.id.countTextView)
-    }
 }
