@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">ShoppingList</string>
     <string name="add_item_content_description">Add new shop item</string>
+    <string name="hint_name">Name:</string>
+    <string name="hint_count">Count:</string>
+    <string name="button_text_save">Save</string>
 </resources>
