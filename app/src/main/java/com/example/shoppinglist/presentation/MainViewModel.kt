@@ -21,7 +21,6 @@ class MainViewModel(private val repository: ShopListRepositoryImpl) : ViewModel(
 
 
     init {
-        _shopList.postValue(getShopListUseCase.getShopList())
     }
 
     fun removeShopItem(shopItem: ShopItem) {
