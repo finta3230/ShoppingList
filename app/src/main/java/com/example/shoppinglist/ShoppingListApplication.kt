@@ -7,8 +7,8 @@ import com.example.shoppinglist.data.ShopListRepositoryImpl
 
 class ShoppingListApplication : Application() {
 
-    val database: ShopListDatabase = ShopListDatabase.getDatabase(this)
-    val repository : ShopListRepositoryImpl = ShopListRepositoryImpl(database.shopListDao())
+    val database by lazy { ShopListDatabase.getDatabase(this) }
+    val repository by lazy { ShopListRepositoryImpl(database.shopListDao()) }
 
 }
 

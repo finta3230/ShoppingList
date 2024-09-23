@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels {
         MainViewModelFactory((application as ShoppingListApplication).repository)
     }
-    private var count = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,15 +31,6 @@ class MainActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-        }
-
-        viewModel.shopList.observe(this){
-            Log.d("Main Activity", it.toString())
-            if (count == 0) {
-                count++
-                val item = it[0]
-                viewModel.changeShopItemState(item)
-            }
         }
 
 

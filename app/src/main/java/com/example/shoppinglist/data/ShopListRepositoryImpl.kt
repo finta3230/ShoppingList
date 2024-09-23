@@ -1,7 +1,5 @@
 package com.example.shoppinglist.data
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.shoppinglist.domain.ShopItem
 import com.example.shoppinglist.domain.ShopListRepository
 

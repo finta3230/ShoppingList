@@ -12,7 +12,9 @@ constraintlayout = "2.1.4"
 room_version = "2.6.1"
 
 [libraries]
+room_compiler = {group = "androidx.room", name = "room-compiler", version.ref = "room_version"}
 room = {group = "androidx.room", name = "room-runtime", version.ref = "room_version"}
+room_ktx = {group = "androidx.room", name = "room-ktx", version.ref = "room_version"}
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -23,6 +25,7 @@ androidx-activity = { group = "androidx.activity", name = "activity", version.re
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 [plugins]
+jetbrains-kotlin-kapt = {id = "org.jetbrains.kotlin.kapt",version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 

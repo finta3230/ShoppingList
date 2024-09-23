@@ -10,7 +10,10 @@ import com.example.shoppinglist.domain.ShopItem
 @Database(entities = [ShopItem::class], version = 1, exportSchema = false)
 abstract class ShopListDatabase : RoomDatabase() {
 
+    abstract fun shopListDao(): ShopListDao
+
     companion object {
+
         private const val DB_NAME = "shopList.db"
 
         @Volatile
@@ -19,7 +22,7 @@ abstract class ShopListDatabase : RoomDatabase() {
         fun getDatabase(context: Context): ShopListDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
-                    context,
+                    context.applicationContext,
                     ShopListDatabase::class.java,
                     DB_NAME
                 ).build()
@@ -28,13 +31,4 @@ abstract class ShopListDatabase : RoomDatabase() {
             }
         }
     }
-
-    private lateinit var applicationContext: Application
-
-    fun init(application: Application) {
-        applicationContext = application
-    }
-
-
-    abstract fun shopListDao(): ShopListDao
 }
