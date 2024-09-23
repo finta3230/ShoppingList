@@ -9,44 +9,29 @@ import com.example.shoppinglist.domain.ShopListRepository
 //Data слой отвечает за работу с данными. Он предоставляет конкретную реализацию репозитория и зависит от Domain слоя и знает о нём всё
 
 
-object ShopListRepositoryImpl : ShopListRepository {
-
-    private val shopListLD = MutableLiveData<List<ShopItem>>()
-    private val shopList = mutableListOf<ShopItem>()
-    private val shopListDatabase = ShopListDatabase
+class ShopListRepositoryImpl(private val dao : ShopListDao) : ShopListRepository {
 
     private var autoIncrementId = 0
 
-    init {
-
-    }
-
     override fun addShopItem(item: ShopItem) {
         if (item.id == ShopItem.UNDEFINED_ID) item.id = autoIncrementId++
-        shopList.add(item)
-        updateList()
+        dao.addShopItem(item)
     }
 
     override fun editShopItem(shopItem: ShopItem) {
-        val oldElement = getShopItem(shopItem.id)
-        shopList.remove(oldElement)
-        addShopItem(shopItem)
+        dao.editShopItem(shopItem)
     }
 
-    override fun getShopItem(id: Int): ShopItem? {
-        return shopList.find { it.id == id }
+    override fun getShopItem(id: Int): ShopItem {
+        return dao.getShopItem(id)
     }
 // Передаём именно копию списка
-    override fun getShopList(): LiveData<List<ShopItem>> {
-        return shopListLD
+    override fun getShopList(): List<ShopItem> {
+        return dao.getShopList()
     }
 
     override fun removeShopItem(shopItem: ShopItem) {
-        shopList.remove(shopItem)
-        updateList()
+        dao.removeShopItem(shopItem)
     }
 
-    private fun updateList(){
-        shopListLD.value = shopList.toList()
-    }
 }

@@ -20,7 +20,7 @@ interface ShopListDao {
     fun getShopItem(id : Int) : ShopItem
 
     @Query("SELECT * FROM shop_items")
-    fun getShopList(id : Int) : List<ShopItem>
+    fun getShopList() : List<ShopItem>
 
     @Delete
     fun removeShopItem(shopItem: ShopItem)

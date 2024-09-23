@@ -3,11 +3,14 @@ package com.example.shoppinglist.presentation
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.shoppinglist.R
+import com.example.shoppinglist.ShoppingListApplication
 
 //Presentation слой отвечает за отображение данных и взаимодействие с пользователем.
 //Методы бизнес логики вызываются из UseCase
@@ -15,7 +18,9 @@ import com.example.shoppinglist.R
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModels {
+        MainViewModelFactory((application as ShoppingListApplication).repository)
+    }
     private var count = 0
 
 
@@ -29,7 +34,6 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.shopList.observe(this){
             Log.d("Main Activity", it.toString())
             if (count == 0) {
