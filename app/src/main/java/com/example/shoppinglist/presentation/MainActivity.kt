@@ -2,6 +2,7 @@ package com.example.shoppinglist.presentation
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -33,6 +34,14 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        val addItemButton = findViewById<Button>(R.id.addItemButton)
+        addItemButton.setOnClickListener{
+            viewModel.addShopItem()
+        }
 
+        val deleteItemButton = findViewById<Button>(R.id.deleteItemButton)
+        deleteItemButton.setOnClickListener{
+            viewModel.removeShopItem()
+        }
     }
 }

@@ -14,7 +14,7 @@ data class ShopItem(
     val count : Int,
     val enabled : Boolean,
     @PrimaryKey(autoGenerate = true)
-    var id : Int = UNDEFINED_ID
+    var id : Int = 0
 ) {
     companion object {
         const val UNDEFINED_ID = -1
