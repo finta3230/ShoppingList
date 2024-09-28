@@ -57,8 +57,6 @@ class MainViewModel(private val repository: ShopListRepositoryImpl) : ViewModel(
     private fun updateShopItemList() {
         viewModelScope.launch(Dispatchers.IO) {
             _shopList.postValue(getShopListUseCase.getShopList())
-            updateShopItemList()
-
         }
     }
 
