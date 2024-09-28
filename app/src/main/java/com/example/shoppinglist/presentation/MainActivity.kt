@@ -33,15 +33,15 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        val addItemButton = findViewById<Button>(R.id.addItemButton)
-        addItemButton.setOnClickListener{
-            viewModel.addShopItem()
-        }
-
-        val deleteItemButton = findViewById<Button>(R.id.deleteItemButton)
-        deleteItemButton.setOnClickListener{
-            viewModel.removeShopItem()
-        }
+//
+//        val addItemButton = findViewById<Button>(R.id.addItemButton)
+//        addItemButton.setOnClickListener{
+//            viewModel.addShopItem()
+//        }
+//
+//        val deleteItemButton = findViewById<Button>(R.id.deleteItemButton)
+//        deleteItemButton.setOnClickListener{
+//            viewModel.removeShopItem()
+//        }
     }
 }
