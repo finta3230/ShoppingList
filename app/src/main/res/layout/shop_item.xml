@@ -16,7 +16,7 @@
         android:id="@+id/shopItemLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background=""
+        android:background="@color/active_item_background"
         android:orientation="horizontal"
         android:padding="16dp">
 
@@ -27,8 +27,8 @@
             android:layout_weight="1"
             android:textColor="@color/white"
             android:textSize="16sp"
-            tools:text="Name 1"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            tools:text="Wet wipes" />
 
         <TextView
             android:id="@+id/countTextView"
@@ -37,7 +37,7 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
-            tools:text="1"  />
+            tools:text="1" />
 
     </LinearLayout>
 
