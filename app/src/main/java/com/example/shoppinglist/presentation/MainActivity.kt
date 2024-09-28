@@ -10,8 +10,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.R
 import com.example.shoppinglist.ShoppingListApplication
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 //Presentation слой отвечает за отображение данных и взаимодействие с пользователем.
 //Методы бизнес логики вызываются из UseCase
@@ -22,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels {
         MainViewModelFactory((application as ShoppingListApplication).repository)
     }
+    private lateinit var shopListAdapter : ShopListAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,15 +36,23 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-//
-//        val addItemButton = findViewById<Button>(R.id.addItemButton)
-//        addItemButton.setOnClickListener{
-//            viewModel.addShopItem()
-//        }
-//
-//        val deleteItemButton = findViewById<Button>(R.id.deleteItemButton)
-//        deleteItemButton.setOnClickListener{
-//            viewModel.removeShopItem()
-//        }
+
+        setUpRecyclerView()
+        viewModel.shopList.observe(this){
+            shopListAdapter.submitList(it)
+        }
+
+        val addShopItemButton = findViewById<FloatingActionButton>(R.id.addShopItemButton).setOnClickListener{
+            viewModel.addShopItem()
+        }
+
+    }
+
+    private fun setUpRecyclerView(){
+        val shopListRecyclerView : RecyclerView = findViewById(R.id.shopItemListRecyclerView)
+        with(shopListRecyclerView){
+            shopListAdapter = ShopListAdapter()
+            this.adapter = shopListAdapter
+        }
     }
 }

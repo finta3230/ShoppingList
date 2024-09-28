@@ -16,6 +16,7 @@
         tools:listitem="@layout/shop_item" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addShopItemButton"
         android:layout_width="wrap_content"
         android:layout_margin="8dp"
         android:src="@android:drawable/ic_input_add"

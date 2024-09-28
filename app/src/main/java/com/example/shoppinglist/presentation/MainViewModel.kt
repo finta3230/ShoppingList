@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.shoppinglist.data.ShopListRepositoryImpl
 import com.example.shoppinglist.domain.AddShopItemUseCase
+import com.example.shoppinglist.domain.EditShopItemUseCase
 import com.example.shoppinglist.domain.GetShopListUseCase
 import com.example.shoppinglist.domain.RemoveShopItemUseCase
 import com.example.shoppinglist.domain.ShopItem
@@ -17,12 +18,22 @@ class MainViewModel(private val repository: ShopListRepositoryImpl) : ViewModel(
 
     private val removeShopItemUseCase = RemoveShopItemUseCase(repository)
     private val addShopItemUseCase = AddShopItemUseCase(repository)
+    private val editShopItemUseCase = EditShopItemUseCase(repository)
     private val getShopListUseCase = GetShopListUseCase(repository)
 
     private val _shopList = MutableLiveData<List<ShopItem>>()
     val shopList: LiveData<List<ShopItem>> = _shopList
 
     init {
+        updateShopItemList()
+    }
+
+    fun changeShopItemState(shopItem: ShopItem){
+        editShopItemUseCase.editShopItem(shopItem.copy(enabled = !shopItem.enabled))
+    }
+
+    fun editShopItem(shopItem: ShopItem){
+        editShopItemUseCase.editShopItem(shopItem)
         updateShopItemList()
     }
 
@@ -34,7 +45,7 @@ class MainViewModel(private val repository: ShopListRepositoryImpl) : ViewModel(
 
         }
     }
-
+// TODO() вызывать view для добавления элемента
     fun addShopItem() {
         viewModelScope.launch(Dispatchers.IO) {
             addShopItemUseCase.addShopItem(ShopItem("Some name", 0, true))
